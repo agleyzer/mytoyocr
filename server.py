@@ -3,6 +3,7 @@
 import http.server
 import socketserver
 import json
+from urllib import request
 
 PORT = 8000
 
@@ -10,8 +11,12 @@ class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
         length = int(self.headers.get('content-length'))
         
-        with open('/tmp/image.png','wb') as s:
-                s.write(self.rfile.read(length))
+        input = json.loads(self.rfile.read(length))
+    
+        with request.urlopen(input['imgBase64']) as r:
+            data = r.read()
+            with open("/tmp/image.png", "wb") as f:
+                f.write(data)
 
         #send response code:
         self.send_response(201)
