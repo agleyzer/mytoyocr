@@ -1,5 +1,6 @@
 const canvas = document.getElementById('drawing-board');
 const toolbar = document.getElementById('toolbar');
+const output = document.getElementById('output');
 const ctx = canvas.getContext('2d');
 
 const canvasOffsetX = canvas.offsetLeft;
@@ -16,6 +17,14 @@ let startY;
 toolbar.addEventListener('click', e => {
     if (e.target.id === 'clear') {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        while (output.firstChild) {
+            output.removeChild(output.firstChild);
+        }
+    }
+    if (e.target.id === 'send') {
+        let image = new Image();
+        image.src = canvas.toDataURL();
+        output.appendChild(image);
     }
 });
 
